@@ -8,12 +8,10 @@ interface ShowProductRequest {
 }
 
 class ShowProductService {
-  public async execute({
-    id,
-  }: ShowProductRequest): Promise<Product | undefined> {
+  public async execute({ id }: ShowProductRequest): Promise<Product> {
     const productsRepository = getCustomRepository(ProductRepository);
 
-    const product = productsRepository.findOne(id);
+    const product = await productsRepository.findOne(id);
 
     if (!product) {
       throw new AppError('Product not found.');
