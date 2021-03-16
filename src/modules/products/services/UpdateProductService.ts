@@ -3,7 +3,7 @@ import { getCustomRepository } from 'typeorm';
 import Product from '../typeorm/entities/Product';
 import { ProductRepository } from '../typeorm/repositories/ProductsRepository';
 
-interface ShowProductRequest {
+interface UpdateProductRequest {
   id: string;
   name: string;
   price: number;
@@ -16,7 +16,7 @@ class UpdateProductService {
     name,
     price,
     quantity,
-  }: ShowProductRequest): Promise<Product> {
+  }: UpdateProductRequest): Promise<Product> {
     const productsRepository = getCustomRepository(ProductRepository);
 
     const product = await productsRepository.findOne(id);
