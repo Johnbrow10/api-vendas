@@ -1,6 +1,7 @@
 import AppError from '@shared/errors/AppErrors';
+import { hash } from 'bcryptjs';
 import { getCustomRepository } from 'typeorm';
-import {} from 'date-fns';
+import { isAfter, addHours } from 'date-fns';
 import UsersRepository from '../typeorm/repositories/UsersRepository';
 import UserTokensRepository from '../typeorm/repositories/UserTokensRepository';
 
@@ -25,6 +26,15 @@ class ResetPasswordService {
     if (!user) {
       throw new AppError('User Token does not exists!!');
     }
+
+    const tokenCreatedAdt = userToken.created_at;
+    const compareDate = addHours(tokenCreatedAdt, 2);
+
+    if (isAfter(Date.now(), compareDate)) {
+      throw new AppError('Token Expired');
+    }
+
+    user.password = await hash(password, 8);
   }
 }
 
