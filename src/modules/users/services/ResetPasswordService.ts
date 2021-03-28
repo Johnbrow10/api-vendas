@@ -35,6 +35,8 @@ class ResetPasswordService {
     }
 
     user.password = await hash(password, 8);
+    // esqueci de colocar o save para uma nova senha
+    await usersRepository.save(user);
   }
 }
 
