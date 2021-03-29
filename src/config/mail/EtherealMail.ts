@@ -11,7 +11,7 @@ interface ITemplateVariable {
 }
 
 interface IParse {
-  template: string;
+  file: string;
   variables: ITemplateVariable;
 }
 
