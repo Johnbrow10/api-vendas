@@ -14,11 +14,11 @@ export class CreateCustomers1617478971012 implements MigrationInterface {
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'email',
+            name: 'name',
             type: 'varchar',
           },
           {
-            name: 'name',
+            name: 'email',
             type: 'varchar',
           },
           {
