@@ -28,6 +28,37 @@ class CreateOrderService {
     }
 
     const existsProducts = await productsRepository.findAllByIds(products);
+
+    if (!existsProducts.length) {
+      throw new AppError('Could not find any products with the given ids.');
+    }
+
+    const existsProductsIds = existsProducts.map(product => product.id);
+    // Aquilo que nao tiverem nos produtos pesquisados no repositorio que seria na api vai cair nessa variavel de checkar
+    const checkInexistentProducts = products.filter(
+      product => !existsProductsIds.includes(product.id),
+    );
+
+    // caso nao tiver esse produto inexistente na api ira cancelar o processo
+    if (checkInexistentProducts.length) {
+      throw new AppError(
+        `Could not find product ${checkInexistentProducts[0].id}`,
+      );
+    }
+
+    // Do array que foi enviado vou percorrer cada produto e comprar se aquele produto tem no repositorio pelo id.
+    const quantityAvailable = products.filter(
+      // entao ele compara se a quantidade que tivermos e menor que o cliente estra pedindo
+      product =>
+        existsProducts.filter(p => p.id === product.id)[0].quantity <
+        product.quantity,
+    );
+    // e depois faz uma verificao na quantidade que tem no estoque, se nao tiver suficiente retornar uma mensagem de erro
+    if (quantityAvailable.length) {
+      throw new AppError(
+        `A quantidade de ${quantityAvailable[0].quantity} nao e valida para ${quantityAvailable[0].id}`,
+      );
+    }
   }
 }
 
