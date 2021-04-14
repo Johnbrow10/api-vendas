@@ -59,6 +59,19 @@ class CreateOrderService {
         `A quantidade de ${quantityAvailable[0].quantity} nao e valida para ${quantityAvailable[0].id}`,
       );
     }
+
+    // Lista de produtos com os dados ja criados
+    const serializedProducts = products.map(product => ({
+      product_id: product.id,
+      quantity: product.quantity,
+      price: existsProducts.filter(p => p.id === product.id)[0].price,
+    }));
+
+    //  Registro de order para compras com a lista e o cliente que ta fazendo o pedido
+    const order = await ordersRepository.createOrder({
+      customer: customerExists,
+      products: serializedProducts,
+    });
   }
 }
 
