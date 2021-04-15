@@ -79,7 +79,8 @@ class CreateOrderService {
       id: product.product_id,
       // Nessa quantidade ele ira capturar a quantidade atual do repositorio e depois diminuir a quantidade que vem do produto pedido pela order
       quantity:
-        existsProducts.filter(p => p.id === product.id)[0].quantity -
+        // id e do product da order e faz comparação com product_id do estoque
+        existsProducts.filter(p => p.id === product.product_id)[0].quantity -
         product.quantity,
     }));
 
