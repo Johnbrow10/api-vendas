@@ -9,7 +9,7 @@ export default class RedisCache {
   }
 
   public async save(key: string, value: any): Promise<void> {
-    console.log(key, value);
+    await this.client.set(key, JSON.stringify(value));
   }
 
   //  descrevendo que o metodo e aquele tipo generico com o "T" e a promessa tbm e desse tipo o "T"
