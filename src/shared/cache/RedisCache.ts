@@ -13,8 +13,25 @@ export default class RedisCache {
   }
 
   //  descrevendo que o metodo e aquele tipo generico com o "T" e a promessa tbm e desse tipo o "T"
-  // public async recover<T>(key: string): Promise<T | null>{}
+  public async recover<T>(key: string): Promise<T | null> {
+    // buscar as informações pela key
+    const data = await this.client.get(key);
+
+    // se nao tiver nada nas keys
+    if (!data) {
+      return null;
+    }
+
+    // tem que fazer um parsed para devolover ao padrao original
+    const parsedData = JSON.parse(data) as T;
+
+    //  Depois fazer um retorno com os dados corretos
+    return parsedData;
+  }
 
   //  Metodo para apagar cache
-  // public async invalidate(key: string): Promise<void> {}
+  public async invalidate(key: string): Promise<void> {
+    //  Pegar o cliente e faz um metodo del com a chave
+    await this.client.del(key);
+  }
 }
