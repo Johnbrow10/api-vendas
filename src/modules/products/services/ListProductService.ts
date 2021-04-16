@@ -9,9 +9,17 @@ class ListProductService {
 
     const redisCache = new RedisCache();
 
-    const products = await productsRepository.find();
+    //  Variavel que recupera a listagem de todas as chaves de cache
+    let products = await redisCache.recover<Product[]>(
+      'api-vendas-PRODUCT_LIST',
+    );
 
-    await redisCache.save('teste', 'teste');
+    if (!products) {
+      //  Se nao tiver informacao de product no cache ele produz uma nova
+      products = await productsRepository.find();
+
+      await redisCache.save('api-vendas-PRODUCT_LIST', products);
+    }
 
     return products;
   }
